@@ -1,0 +1,8 @@
+<environment>
+  <components>
+    <devicesettings>
+      <dependencies>sdk,libxml2,glib,gstreamer,yasm,ffmpeg,gst-ffmpeg,linux-fusion,DirectFB,FusionDale,curl,e2fsprogs,libsoup,gssdp,gupnp,gst-plugins-base,gst-plugins-good,gst-plugins-bad,xfs,log4c,openssl,mongoose,jansson,gupnp-av,tinyxml,qt,dtcp,gst-plugins,mediaframework,mediastreamer,servicemanager</dependencies>
+
+   </devicesettings>
+  </components>
+</environment>
