@@ -1,0 +1,18 @@
+* text=auto !eol
+/Makefile -text
+/build.sh -text
+ds/Makefile -text
+ds/audioOutputPortConfig.cpp -text
+ds/frontPanelTextDisplay.cpp -text
+ds/host.cpp -text
+ds/iarmProxy.cpp -text
+ds/iarmProxy.hpp -text
+ds/include/videoOutputPort.hpp -text
+ds/init.cpp -text
+ds/videoDeviceConfig.cpp -text
+ds/videoOutputPort.cpp -text
+ds/videoOutputPortConfig.cpp -text
+ds/videoOutputPortConfig.hpp -text
+ds/videoOutputPortType.cpp -text
+/rdk_build.sh -text
+/rdk_env.xml -text
