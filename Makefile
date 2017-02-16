@@ -1,15 +1,19 @@
-all:
-	@make -C hal/emu uninstall clean all
-	@make -C ds uninstall clean all
 
-clean:
-	@make -C ds $@
-	@make -C hal/emu $@
+RM          := rm -rf
+CXXFLAGS    = -std=c++1y  -g -fPIC -D_REENTRANT -Wall 
+LIBNAME     := ds-hal
+LIBNAMEFULL := lib$(LIBNAME).so
+OBJS        := $(patsubst %.c,%.o,$(wildcard *.c))
 
-uninstall: clean
-	@make -C ds $@
-	@make -C hal/emu $@
+library: $(OBJS)
+	@echo "Building $(LIBNAMEFULL) ...."
+	$(CXX) $(OBJS) $(CXXFLAGS) $(CFLAGS) -shared -Wl,-soname,lib$(LIBNAME).so -o $(LIBNAMEFULL)
 
-unittest: 
-	@make -C test clean all
+%.o: %.c
+	@echo "Building $@ ...."
+	$(CXX) -c $<  $(CXXFLAGS) $(CFLAGS) -o $@
 
+install: $(LIBNAMEFULL)
+	@echo "Installing files in $(DESTDIR) ..."
+	install -d $(DESTDIR)
+	install -m 0755 $< $(DESTDIR)
