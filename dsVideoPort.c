@@ -98,93 +98,6 @@ static int readResolution(FILE *f, char *buffer, size_t len)
       }
    }
 }
-
-/*******************************************************************************************
-FunctionName : dsGetResolution , This function is used to get the curernt resolution
-Inputs Arguments: handler 
-Output Arguments : resolution
-Return Value : -1 if failed
-********************************************************************************************/
-dsError_t  dsGetResolution(int handle, dsVideoPortResolution_t *resolution)
-{
-	dsVideoPortParam_t* videoPortHdl;
-	videoPortHdl = (dsVideoPortParam_t *)handle;
-	int ret = 0;
-	char strResolution[SIZE], displayType[MINSIZE], Resolution[MINSIZE];
-	char *heightinfo;
-
-	int height; 
-
-	FILE *fp = fopen ( PERSISTANT_PATH, "r" );
-
-	size_t index = 0;
-	for (; index < videoPortMaxIndex; index++) {
-		if (&dsVideoPortHandler[index] == videoPortHdl) {
-			break;
-		}
-	}
-	if(fp && resolution){
-	while(ret != -1)
-        {
-	ret = readResolution(fp,strResolution, SIZE);
-        sscanf(strResolution, "%s" "%s",displayType, Resolution);
-	if(strstr(displayType, "HDMI0"))
-		strcpy (resolution->name, Resolution);
-	}
-	fclose(fp);
-	}
-#if 0
-	if(fp && resolution)
-	{
-		ret = readResolution(fp,strResolution,SIZE);
-		printf("Resolution information from file = %s\n",strResolution);
-		if( ret )
-		{
-			heightinfo = strrchr( strResolution , ',');
-			heightinfo++;
-			height =atoi(heightinfo);
-			switch(height)
-			{
-				case 480:
-					resolution->pixelResolution = dsVIDEO_PIXELRES_720x480;
-					strcpy (resolution->name, "480i");
-					break;
-				case 576:
-					resolution->pixelResolution = dsVIDEO_PIXELRES_720x576;
-					strcpy (resolution->name, "576");
-					break;
-				case 720:
-					resolution->pixelResolution=dsVIDEO_PIXELRES_1280x720;
-					strcpy (resolution->name, "720");
-					break;
-
-				case 1080:
-					resolution->pixelResolution=dsVIDEO_PIXELRES_1920x1080;
-					strcpy (resolution->name, "1080p");
-					break;
-
-				default:
-					resolution->pixelResolution=dsVIDEO_PIXELRES_1920x1080;
-					strcpy (resolution->name, "1080p");
-					break;
-
-			}
-		}
-
-
-	}i
-#endif
-	else
-	{
-		printf(" No File Found\n");
-		resolution->interlaced=dsVideoPortHandler[index].resolutionValue.interlaced;
-		resolution->pixelResolution=dsVideoPortHandler[index].resolutionValue.pixelResolution;
-		resolution->aspectRatio=dsVideoPortHandler[index].resolutionValue.aspectRatio;
-		resolution->frameRate=dsVideoPortHandler[index].resolutionValue.frameRate;
-		strncpy(resolution->name, dsVideoPortHandler[index].resolutionValue.name,strlen(dsVideoPortHandler[index].resolutionValue.name));
-	}
-	return dsERR_GENERAL;
-}
 /*******************************************************************************************
 FunctionName : dsVideoPortInitialize , This function is used to initialize the video ports
 Inputs Arguments: port index, property to set, property value
@@ -540,6 +453,73 @@ dsError_t  dsStoreResolution(dsVideoResolution_t resolution )
 		printf("Invalid Resolution\n");
     }   
     
+}
+/*******************************************************************************************
+FunctionName : dsGetResolution , This function is used to get the curernt resolution
+Inputs Arguments: handler 
+Output Arguments : resolution
+Return Value : -1 if failed
+********************************************************************************************/
+dsError_t  dsGetResolution(int handle, dsVideoPortResolution_t *resolution)
+{
+	dsVideoPortParam_t* videoPortHdl;
+	videoPortHdl = (dsVideoPortParam_t *)handle;
+	int ret = 0;
+	char strResolution[SIZE], displayType[MINSIZE], Resolution[MINSIZE];
+	char *heightinfo;
+
+	int height; 
+
+	FILE *fp = fopen ( PERSISTANT_PATH, "r" );
+
+	size_t index = 0;
+	for (; index < videoPortMaxIndex; index++) {
+		if (&dsVideoPortHandler[index] == videoPortHdl) {
+			break;
+		}
+	}
+	if(fp && resolution){
+	while(ret != -1)
+        {
+	ret = readResolution(fp,strResolution, SIZE);
+        sscanf(strResolution, "%s" "%s",displayType, Resolution);
+	if(strstr(displayType, "HDMI0"))
+		strcpy (resolution->name, Resolution);
+		 if(strcmp(resolution->name,"480i")==0)
+                   {
+                       resolution->pixelResolution = dsVIDEO_PIXELRES_720x480;
+                    }
+                 else if(strcmp(resolution->name,"576")==0)
+                   {
+                    resolution->pixelResolution = dsVIDEO_PIXELRES_720x576;
+		   }
+                else if(strcmp(resolution->name,"720p")==0)
+                     {
+                      resolution->pixelResolution=dsVIDEO_PIXELRES_1280x720;
+                     }
+                  else if(strcmp(resolution->name,"1080p24")==0)
+                     {
+                       resolution->pixelResolution=dsVIDEO_PIXELRES_1920x1080;
+                     }
+                   else
+                      {
+                       resolution->pixelResolution=dsVIDEO_PIXELRES_1280x720;
+                      }
+		   dsStoreResolution(resolution->pixelResolution);
+
+	}
+	fclose(fp);
+	}
+	else
+	{
+		printf(" No File Found\n");
+		resolution->interlaced=dsVideoPortHandler[index].resolutionValue.interlaced;
+		resolution->pixelResolution=dsVideoPortHandler[index].resolutionValue.pixelResolution;
+		resolution->aspectRatio=dsVideoPortHandler[index].resolutionValue.aspectRatio;
+		resolution->frameRate=dsVideoPortHandler[index].resolutionValue.frameRate;
+		strncpy(resolution->name, dsVideoPortHandler[index].resolutionValue.name,strlen(dsVideoPortHandler[index].resolutionValue.name));
+	}
+	return dsERR_GENERAL;
 }
 /*******************************************************************************************
 FunctionName : dsSetResolution, This function is used to set the resolution
