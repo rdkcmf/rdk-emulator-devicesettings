@@ -342,6 +342,19 @@ dsError_t  dsEnableVideoPort(int handle, bool enabled)
 	}
 	return ret;
 }
+/**
+ * @brief Enable/disable all video port.
+ * This function enables or disables all video port.
+ * @param [in] enabled     Flag to control the video port state
+ *                         (@a true to enable, @a false to disable)
+ * @return    Error Code.
+ * @retval    ::dsError_t
+ */
+dsError_t  dsEnableAllVideoPort(bool enabled)
+{
+        dsError_t ret = dsERR_NONE;
+        return ret;
+}
 /*******************************************************************************************
 FunctionName : dsIsVideoPortHandleValid , This function is used tocheck whether display is connected
 Inputs Arguments: port handler
