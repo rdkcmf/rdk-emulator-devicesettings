@@ -423,12 +423,12 @@ dsError_t dsSetWidthAndHeight( char *width , char *height)
 		fputs(width,fp);
 		fputc(',',fp);
 		fputs(height,fp);
+		fclose(fp);
 	}
 	else
 	{
 		printf("file open failed\n");
 	}
-	fclose(fp);
 	return ret;
 }
 /*******************************************************************************************
