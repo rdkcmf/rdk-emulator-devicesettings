@@ -282,7 +282,7 @@ dsError_t  dsGetVideoPort(dsVideoPortType_t type, int index, int *handle)
 
 	_RETURN_IF_ERROR(((dsVideoPortType_isValid(type)) && (index >=0 && index < videoPortMaxIndex)), dsERR_OPERATION_NOT_SUPPORTED);
 
-	*handle = (int)&dsVideoPortHandler[index];
+	*handle = (intptr_t)&dsVideoPortHandler[index];
 	return ret;
 }
 /**************************************************************************************************

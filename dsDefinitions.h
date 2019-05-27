@@ -36,7 +36,7 @@ typedef struct _dsDisplayParam_t
 }dsDisplayParam_t;
 
 
-dsDisplayParam_t *dsVideoDisplayHandler = '\0';
+dsDisplayParam_t *dsVideoDisplayHandler = NULL;
 
 dsError_t dsDisplayHdlCheck(int handle);
 

@@ -20,11 +20,11 @@
 #include "dsDisplay.h"
 #include "dsTypes.h"
 #include "dsError.h"
-#include "dsDefinitions.h"
 #include "dsVideoResolutionSettings.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "dsDefinitions.h"
 
 
 dsDisplayEDID_t displayEDID;
@@ -118,7 +118,7 @@ dsError_t dsGetDisplay(dsVideoPortType_t vType, int index, int *handle)
 
 	if (ret == dsERR_NONE) 
         {
-		*handle = (int)&_handles[vType][index];
+		*handle = (intptr_t)&_handles[vType][index];
 	} 
 	
 	return ret;
