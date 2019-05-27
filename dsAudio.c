@@ -89,7 +89,7 @@ dsError_t  dsGetAudioPort(dsAudioPortType_t type, int index, int *handle)
 	dsError_t ret = dsERR_NONE;
     	if ( index >= 0 && index < dsAudio_port_max) {
 	    if ( (audioOutputPorts + index)->portId.type == type && (audioOutputPorts + index)->portId.index == index) {
-       *handle = (int)(audioOutputPorts + index);
+       *handle = (intptr_t)(audioOutputPorts + index);
         ret =  dsERR_NONE;
         	}
     	}
