@@ -46,6 +46,7 @@ const bool dsVideoContentProtect[dsVIDEOPORT_TYPE_MAX] = {true, false, true, tru
 size_t videoPortMaxIndex = 0;
 typedef struct _dsVideoPortParam_t {
 	bool videoPortEnabled;
+	bool videoPortActive;
 	bool videoPortConnected;
 	bool dtcpContentProtection;
 	bool hdcpContentProtection;
@@ -118,6 +119,11 @@ dsError_t dsVideoPortInitialize(size_t index,char* prop,char* values)
     if(strcmp(prop,"videoPortEnabled") == 0) {
         sscanf(values,"%d",&dsVideoPortHandler[index].videoPortEnabled);
     	printf(" \n dsVideoPortHandler[index].videoPortEnabled %x \n ", dsVideoPortHandler[index].videoPortEnabled );
+        return dsERR_NONE;
+    }
+    if(strcmp(prop,"videoPortActive") == 0) {
+        sscanf(values,"%d",&dsVideoPortHandler[index].videoPortActive);
+        printf(" \n dsVideoPortHandler[index].videoPortActive %x \n ", dsVideoPortHandler[index].videoPortActive );
         return dsERR_NONE;
     }
     if(strcmp(prop,"videoPortConnected") == 0) {
@@ -342,6 +348,65 @@ dsError_t  dsEnableVideoPort(int handle, bool enabled)
 	}
 	return ret;
 }
+
+/**************************************************************************************************
+FunctionName : dsIsVideoPortActive, This function is used to check whether video port is active
+Inputs Arguments: port handler
+Output Arguments : true or false
+Return Value : -1 if failed
+********************************************************************************************/
+dsError_t dsIsVideoPortActive(int handle, bool *active)
+{
+    dsError_t ret = dsERR_NONE;
+	dsVideoPortParam_t *videoPortHdl;
+
+	_RETURN_IF_ERROR(handle > INVALID_HANDLE, dsERR_INVALID_PARAM);
+	_RETURN_IF_ERROR(active != NULL, dsERR_INVALID_PARAM);
+
+	videoPortHdl = (dsVideoPortParam_t *)handle;
+	ret = dsIsVideoPortHandleValid(handle);
+
+	if (ret == dsERR_NONE) {
+        *((char*)(active))= *((char*)(&(videoPortHdl->videoPortActive)));
+        if (videoPortHdl->videoPortActive) {
+			printf("\n Given Video Port is active %d \n", *active);
+}
+	    else {
+			printf("\n Given Video Port is inactive \n");
+	    }
+	}
+    return ret;
+}
+
+/*******************************************************************************************
+FunctionName : dsActivateVideoPort , This function is used to change activation the video ports
+Inputs Arguments: port handler
+Output Arguments : none
+Return Value : -1 if failed
+********************************************************************************************/
+dsError_t  dsActivateVideoPort(int handle, bool active)
+{
+	dsError_t ret = dsERR_NONE;
+	dsVideoPortParam_t *videoPortHdl;
+
+	_RETURN_IF_ERROR(handle > INVALID_HANDLE, dsERR_INVALID_PARAM);
+	_RETURN_IF_ERROR(dsIsOperationSupported(handle)!= false, dsERR_OPERATION_NOT_SUPPORTED);
+
+	videoPortHdl = (dsVideoPortParam_t *)handle;
+	ret = dsIsVideoPortHandleValid(handle);
+
+	if (ret == dsERR_NONE) {
+		videoPortHdl->videoPortActive = active;
+		if (videoPortHdl->videoPortActive) {
+			printf("The video port is activated\n");
+		}
+		else {
+			printf("The video port is deactivated\n");
+		}
+	}
+	return ret;
+}
+
 /**
  * @brief Enable/disable all video port.
  * This function enables or disables all video port.
