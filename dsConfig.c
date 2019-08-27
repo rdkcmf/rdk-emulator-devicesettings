@@ -112,7 +112,7 @@ dsError_t dsReadCfgFile(size_t index,char* portString,port_initialization_fp ini
     {
 	printf("Platform File Not Found\n");
     }
-    fclose(fptr);
+    if (fptr != NULL) fclose(fptr);
     return retValue;
 }
 
