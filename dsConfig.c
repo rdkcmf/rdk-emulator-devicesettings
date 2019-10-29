@@ -210,8 +210,8 @@ char* dsGetValue(char* property)
                 break;
             }
         }
+        fclose(fptr);
     }
-    fclose(fptr);
     return retValue;
 }
 
@@ -301,8 +301,8 @@ size_t dsGetIndexFrmCfg(char* indexString)
             else
                   break;
         }
+      fclose(fptr);
     }
-    fclose(fptr);
     return index;
 }
 
