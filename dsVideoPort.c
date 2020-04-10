@@ -608,11 +608,11 @@ dsError_t  dsGetResolution(int handle, dsVideoPortResolution_t *resolution)
 }
 /*******************************************************************************************
 FunctionName : dsSetResolution, This function is used to set the resolution
-Inputs Arguments: port handler and resolution structure
+Inputs Arguments: port handler, resolution structure and persist enable status
 Output Arguments : none
 Return Value : -1 if failed
 ********************************************************************************************/
-dsError_t  dsSetResolution(int handle, dsVideoPortResolution_t *resolution)
+dsError_t  dsSetResolution(int handle, dsVideoPortResolution_t *resolution, bool persist)
 {
 
 
@@ -658,7 +658,8 @@ dsError_t  dsSetResolution(int handle, dsVideoPortResolution_t *resolution)
 			printf("The given frame rate is invalid\n");
 		}
 
-
+                if(persist)
+		{
 		ret = dsStoreResolution(resolution->pixelResolution);
 		fp = fopen ( PERSISTANT_PATH , "w");
 		if(fp)
@@ -668,7 +669,7 @@ dsError_t  dsSetResolution(int handle, dsVideoPortResolution_t *resolution)
 			fputs(resolution->name,fp);
 			fclose(fp);
 		}
-
+                }
 
 	}
 
